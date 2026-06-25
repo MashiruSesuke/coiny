@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 
+import Providers from './providers';
+
 import Header from '@/components/ui/Header';
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 
@@ -18,9 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <ServiceWorkerRegister />
-        <Header />
-        {children}
+        <Providers>
+          <ServiceWorkerRegister />
+          <Header />
+          <main className="container mx-auto px-4 py-16">{children}</main>
+        </Providers>
       </body>
     </html>
   );
