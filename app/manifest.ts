@@ -32,7 +32,6 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/screenshots/screenshot1.png',
         sizes: '1280x720',
         type: 'image/png',
-        platform: 'wide',
         label: 'Main dashboard',
       },
     ],
