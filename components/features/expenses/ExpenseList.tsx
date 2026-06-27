@@ -1,36 +1,112 @@
 'use client';
 
-import { useExpenses, useDeleteExpense } from '@/hooks/useExpenses';
+import { useState } from 'react';
+
+import ExpenseForm from './ExpenseForm';
+import Modal from '@/components/ui/Modal';
+
+import { useExpenses, useDeleteExpense, useUpdateExpense } from '@/hooks/useExpenses';
+
+import { Expense } from '@/types/expenses';
+import { ExpenseFormData } from '@/lib/validation/expenseSchema';
+import ExpenseFilters from './ExpenseFilters';
 
 export default function ExpenseList() {
   const { data: expenses, isLoading, isError, error } = useExpenses();
   const deleteMutation = useDeleteExpense();
+  const updateMutation = useUpdateExpense();
+
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  const [filterCategory, setFilterCategory] = useState('');
+  const categories = [...new Set(expenses?.map((e) => e.category) || [])];
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p className="text-red-500">Error: {error?.message}</p>;
 
+  const filteredExpenses = filterCategory
+    ? expenses?.filter((e) => e.category === filterCategory)
+    : expenses;
+
+  const handleUpdate = async (data: ExpenseFormData) => {
+    if (!editingExpense) return;
+    await updateMutation.mutateAsync({ ...editingExpense, ...data });
+    setEditingExpense(null);
+  };
+
+  const handleDelete = async () => {
+    if (deletingId === null) return;
+    await deleteMutation.mutateAsync(deletingId);
+    setDeletingId(null);
+  };
+
+  const total = filteredExpenses?.reduce((sum, e) => sum + e.amount, 0) || 0;
+
   return (
-    <ul className="space-y-2">
-      {expenses?.map((exp) => (
-        <li key={exp.id} className="border p-3 rounded shadow-sm flex justify-between items-center">
-          <div>
-            <div className="font-medium">{exp.title}</div>
-            <div className="text-sm text-gray-500">
-              {exp.category} — {exp.date}
+    <div className="grid gap-4">
+      <ExpenseFilters categories={categories} onFilterChange={setFilterCategory} />
+      <ul className="space-y-2">
+        {filteredExpenses?.map((exp) => (
+          <li
+            key={exp.id}
+            className="border p-3 rounded shadow-sm flex justify-between items-center"
+          >
+            <div>
+              <div className="font-medium">{exp.title}</div>
+              <div className="text-sm text-gray-500">
+                {exp.category} — {exp.date}
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <span>{exp.amount} $</span>
-            <button
-              onClick={() => deleteMutation.mutate(exp.id!)}
-              className="text-red-500 hover:text-red-700"
-              disabled={deleteMutation.isPending}
-            >
-              Delete
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
+            <div className="flex items-center gap-3">
+              <span>{exp.amount} $</span>
+              <button
+                onClick={() => setEditingExpense(exp)}
+                className="text-blue-500 hover:text-blue-700"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => setDeletingId(exp.id!)}
+                className="text-red-500 hover:text-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <p className="text-xl font-bold">Total: {total} $</p>
+
+      {/* Modal for editing */}
+      <Modal isOpen={!!editingExpense} onClose={() => setEditingExpense(null)}>
+        <h3 className="text-lg font-semibold mb-4">Edit expense</h3>
+        {editingExpense && (
+          <ExpenseForm
+            defaultValues={editingExpense}
+            onSubmit={handleUpdate}
+            submitLabel="Update"
+          />
+        )}
+      </Modal>
+
+      {/* Modal for delete confirmation */}
+      <Modal isOpen={deletingId !== null} onClose={() => setDeletingId(null)}>
+        <h3 className="text-lg font-semibold mb-4">Confirm delete</h3>
+        <p>Are you sure you want to delete this expense?</p>
+        <div className="flex justify-end gap-2 mt-4">
+          <button onClick={() => setDeletingId(null)} className="px-4 py-2 border rounded">
+            Cancel
+          </button>
+          <button
+            onClick={handleDelete}
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
+          >
+            Delete
+          </button>
+        </div>
+      </Modal>
+    </div>
   );
 }

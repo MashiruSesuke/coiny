@@ -1,17 +1,27 @@
 'use client';
 
-import { Resolver, useForm } from 'react-hook-form';
+import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { useAddExpense } from '@/hooks/useExpenses';
-
 import { ExpenseFormData, expenseSchema } from '@/lib/validation/expenseSchema';
+
+import { Expense } from '@/types/expenses';
+
+interface ExpenseFormProps {
+  defaultValues?: Expense;
+  onSubmit: (data: ExpenseFormData) => Promise<void>;
+  submitLabel?: string;
+}
 
 /**
  * ExpenseForm component renders a form for adding new expenses.
  * It uses react-hook-form with zod validation and a custom mutation hook for data submission.
  */
-export default function ExpenseForm() {
+export default function ExpenseForm({
+  defaultValues,
+  onSubmit,
+  submitLabel = 'Save',
+}: ExpenseFormProps) {
   const {
     register,
     handleSubmit,
@@ -19,20 +29,21 @@ export default function ExpenseForm() {
     formState: { errors, isSubmitting },
   } = useForm<ExpenseFormData>({
     resolver: zodResolver(expenseSchema) as Resolver<ExpenseFormData>,
-    defaultValues: {
+    defaultValues: defaultValues || {
+      title: '',
+      amount: 0,
+      category: '',
       date: new Date().toISOString().split('T')[0],
     },
   });
 
-  const addMutation = useAddExpense();
-
-  const onSubmit = async (data: ExpenseFormData) => {
-    await addMutation.mutateAsync(data);
+  const handleFormSubmit: SubmitHandler<ExpenseFormData> = async (data) => {
+    await onSubmit(data);
     reset();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 border p-4 rounded">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4 border p-4 rounded">
       <h3 className="text-lg font-semibold">Add expense</h3>
 
       <div>
@@ -64,7 +75,7 @@ export default function ExpenseForm() {
         disabled={isSubmitting}
         className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark disabled:opacity-50"
       >
-        {isSubmitting ? 'Saving...' : 'Save'}
+        {isSubmitting ? 'Saving...' : submitLabel}
       </button>
     </form>
   );
