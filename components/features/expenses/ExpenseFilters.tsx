@@ -2,11 +2,22 @@
 
 import { useState } from 'react';
 
+/**
+ * Props for the ExpenseFilters component.
+ */
 interface ExpenseFiltersProps {
+  /** List of unique categories to populate the dropdown. */
   categories: string[];
+  /** Callback invoked when the selected category changes. */
   onFilterChange: (category: string) => void;
 }
 
+/**
+ * ExpenseFilters — renders a dropdown to filter expenses by category.
+ *
+ * Displays an "All" option followed by all available categories.
+ * Syncs the internal state with the parent via onFilterChange.
+ */
 export default function ExpenseFilters({ categories, onFilterChange }: ExpenseFiltersProps) {
   const [selected, setSelected] = useState('');
 

@@ -2,6 +2,12 @@
 
 import { useExpenses } from '@/hooks/useExpenses';
 
+/**
+ * ExpenseStats — displays summary statistics for the expenses list.
+ *
+ * Shows total, average, max, and min amounts, plus a breakdown
+ * of spending by category.
+ */
 export default function ExpenseStats() {
   const { data: expenses } = useExpenses();
 
@@ -9,12 +15,13 @@ export default function ExpenseStats() {
     return <p className="text-gray-500">No expenses yet</p>;
   }
 
+  // Calculate basic aggregate statistics
   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
   const average = total / expenses.length;
   const max = Math.max(...expenses.map((e) => e.amount));
   const min = Math.min(...expenses.map((e) => e.amount));
 
-  // Stats by category
+  // Group expenses by category and sum amounts per category
   const byCategory = expenses.reduce(
     (acc, e) => {
       acc[e.category] = (acc[e.category] || 0) + e.amount;

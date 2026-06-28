@@ -1,13 +1,27 @@
 import { sortOrder as sortOrderType } from '@/types';
 import { expenseSortField } from '@/types/expenses';
 
+/**
+ * Props for the ExpenseSorting component.
+ */
 interface ExpenseSortingProps {
+  /** Currently active sort field. */
   sortField: expenseSortField;
+  /** Current sort order: 'asc' or 'desc'. */
   sortOrder: sortOrderType;
+  /** Callback invoked when the sort field changes. */
   onSortFieldChange: (sortField: expenseSortField) => void;
+  /** Callback invoked when the sort order changes. */
   onSortOrderChange: (sortOrder: sortOrderType) => void;
 }
 
+/**
+ * ExpenseSorting — renders buttons for sorting expenses by field and order.
+ *
+ * Provides three sort field options (date, amount, title) with visual
+ * indicators for the active field. The last button toggles ascending/descending
+ * order.
+ */
 export default function ExpenseSorting({
   sortField = 'date',
   sortOrder = 'desc',

@@ -5,17 +5,26 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { ExpenseFormData, expenseSchema } from '@/lib/validation/expenseSchema';
 
-import { Expense } from '@/types';
+import { Expense } from '@/types/expenses';
 
+/**
+ * Props for the ExpenseForm component.
+ */
 interface ExpenseFormProps {
+  /** Optional default values for editing an existing expense. */
   defaultValues?: Expense;
+  /** Submit handler called with validated form data. */
   onSubmit: (data: ExpenseFormData) => Promise<void>;
+  /** Label for the submit button. Defaults to 'Save'. */
   submitLabel?: string;
 }
 
 /**
- * ExpenseForm component renders a form for adding new expenses.
- * It uses react-hook-form with zod validation and a custom mutation hook for data submission.
+ * ExpenseForm — a reusable form for creating or editing expenses.
+ *
+ * Uses react-hook-form with zod validation via @hookform/resolvers.
+ * Displays validation errors inline below each field.
+ * Resets the form after successful submission.
  */
 export default function ExpenseForm({
   defaultValues,
@@ -37,6 +46,10 @@ export default function ExpenseForm({
     },
   });
 
+  /**
+   * Handles form submission: calls the onSubmit prop with validated data,
+   * then resets the form to defaults.
+   */
   const handleFormSubmit: SubmitHandler<ExpenseFormData> = async (data) => {
     await onSubmit(data);
     reset();

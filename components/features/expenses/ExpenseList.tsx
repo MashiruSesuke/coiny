@@ -16,11 +16,19 @@ import { ExpenseFormData } from '@/lib/validation/expenseSchema';
 import { Expense, expenseSortField } from '@/types/expenses';
 import { sortOrder as sortOrderType } from '@/types';
 
+/**
+ * ExpenseList — main page component for managing expenses.
+ *
+ * Provides CRUD operations (create via AddExpenseForm, read via useExpenses,
+ * update and delete via mutations), filtering by category, sorting by field/order,
+ * and CSV export for both filtered and full lists.
+ */
 export default function ExpenseList() {
   const { data: expenses, isLoading, isError, error } = useExpenses();
   const deleteMutation = useDeleteExpense();
   const updateMutation = useUpdateExpense();
 
+  // Persist filter and sort preferences in localStorage
   const [filterCategory, setFilterCategory] = useLocalStorage<string>('expenseFilterCategory', '');
   const [sortField, setSortField] = useLocalStorage<expenseSortField>('expenseSortField', 'date');
   const [sortOrder, setSortOrder] = useLocalStorage<sortOrderType>('expenseSortOrder', 'desc');
@@ -28,13 +36,13 @@ export default function ExpenseList() {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  // Filter expenses
+  // Extract unique categories from expenses for the filter dropdown
   const categories = [...new Set(expenses?.map((e) => e.category) || [])];
   const filteredExpenses = filterCategory
     ? expenses?.filter((e) => e.category === filterCategory)
     : expenses;
 
-  // Sort expenses
+  // Sort filtered expenses by the selected field and order
   const sortedExpenses = useMemo(() => {
     if (!filteredExpenses) return [];
     return [...filteredExpenses].sort((a, b) => {
@@ -58,18 +66,21 @@ export default function ExpenseList() {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p className="text-red-500">Error: {error?.message}</p>;
 
+  // Update an existing expense via mutation
   const handleUpdate = async (data: ExpenseFormData) => {
     if (!editingExpense) return;
     await updateMutation.mutateAsync({ ...editingExpense, ...data });
     setEditingExpense(null);
   };
 
+  // Delete an expense via mutation
   const handleDelete = async () => {
     if (deletingId === null) return;
     await deleteMutation.mutateAsync(deletingId);
     setDeletingId(null);
   };
 
+  // Calculate total of filtered expenses (not sorted, since sort doesn't change the set)
   const total = filteredExpenses?.reduce((sum, e) => sum + e.amount, 0) || 0;
 
   return (

@@ -2,12 +2,25 @@
 
 import { ReactNode, useEffect } from 'react';
 
+/**
+ * Props for the Modal component.
+ */
 interface ModalProps {
+  /** Whether the modal is currently visible. */
   isOpen: boolean;
+  /** Callback invoked to close the modal. */
   onClose: () => void;
+  /** Content rendered inside the modal dialog. */
   children: ReactNode;
 }
 
+/**
+ * Modal — a simple overlay dialog component.
+ *
+ * Renders a centered dialog with a semi-transparent backdrop and a close button.
+ * Hides body scroll when open and restores it when closed.
+ * Returns null when `isOpen` is false (no mount overhead).
+ */
 export default function Modal({ isOpen, onClose, children }: ModalProps) {
   useEffect(() => {
     if (isOpen) {

@@ -1,6 +1,6 @@
 import db from './client';
 
-import { Expense } from '@/types';
+import { Expense } from '@/types/expenses';
 
 export async function getExpenses(): Promise<Expense[]> {
   return db.expenses.toArray();
