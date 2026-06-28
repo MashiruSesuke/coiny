@@ -1,6 +1,7 @@
 import DataSeeder from './DataSeeder';
 import ExpenseList from '@/components/features/expenses/ExpenseList';
 import AddExpenseForm from '@/components/features/expenses/AddExpenseForm';
+import ExpenseStats from '@/components/features/expenses/ExpenseStats';
 
 export default function HomePage() {
   return (
@@ -14,6 +15,10 @@ export default function HomePage() {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Expenses list</h2>
           <ExpenseList />
+        </div>
+        <div>
+          <h2 className="text-2xl font-semibold mb-4">Expense stats</h2>
+          <ExpenseStats />
         </div>
       </div>
     </>
