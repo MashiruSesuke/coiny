@@ -5,34 +5,36 @@ import { useMemo, useState } from 'react';
 import ExpenseForm from './ExpenseForm';
 import ExpenseFilters from './ExpenseFilters';
 import ExpenseSorting from './ExpenseSorting';
+import ExpenseExportToCSV from './ExpenseExportToCSV';
 import Modal from '@/components/ui/Modal';
 
 import { useExpenses, useDeleteExpense, useUpdateExpense } from '@/hooks/useExpenses';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 import { ExpenseFormData } from '@/lib/validation/expenseSchema';
 
 import { Expense, expenseSortField } from '@/types/expenses';
 import { sortOrder as sortOrderType } from '@/types';
-import ExpenseExportToCSV from './ExpenseExportToCSV';
 
 export default function ExpenseList() {
   const { data: expenses, isLoading, isError, error } = useExpenses();
   const deleteMutation = useDeleteExpense();
   const updateMutation = useUpdateExpense();
 
+  const [filterCategory, setFilterCategory] = useLocalStorage<string>('expenseFilterCategory', '');
+  const [sortField, setSortField] = useLocalStorage<expenseSortField>('expenseSortField', 'date');
+  const [sortOrder, setSortOrder] = useLocalStorage<sortOrderType>('expenseSortOrder', 'desc');
+
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  const [filterCategory, setFilterCategory] = useState('');
+  // Filter expenses
   const categories = [...new Set(expenses?.map((e) => e.category) || [])];
-
-  const [sortField, setSortField] = useState<expenseSortField>('date');
-  const [sortOrder, setSortOrder] = useState<sortOrderType>('desc');
-
   const filteredExpenses = filterCategory
     ? expenses?.filter((e) => e.category === filterCategory)
     : expenses;
 
+  // Sort expenses
   const sortedExpenses = useMemo(() => {
     if (!filteredExpenses) return [];
     return [...filteredExpenses].sort((a, b) => {
