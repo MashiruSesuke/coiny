@@ -1,10 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Coiny
+
+A Next.js expense tracking application with IndexedDB storage, React Query, and modern TypeScript tooling.
+
+## Tech Stack
+
+| Layer          | Technology                              |
+| -------------- | --------------------------------------- |
+| **Framework**  | Next.js 16 (App Router)                 |
+| **Language**   | TypeScript 5                            |
+| **UI**         | React 19, Tailwind CSS 4                |
+| **State**      | React Query (TanStack), React Hook Form |
+| **Validation** | Zod 4                                   |
+| **Database**   | Dexie (IndexedDB wrapper)               |
+| **Forms**      | react-hook-form + @hookform/resolvers   |
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
+npm install
 npm run dev
 # or
 yarn dev
@@ -16,21 +31,56 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command         | Description              |
+| --------------- | ------------------------ |
+| `npm run dev`   | Start development server |
+| `npm run build` | Build for production     |
+| `npm run start` | Start production server  |
+| `npm run lint`  | Run ESLint               |
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+The project combines a Rails API backend with a Next.js frontend. Below is the layout of the frontend codebase:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+project-root/
+├── app/                         # Next.js App Router pages & layouts
+│   ├── providers.tsx            # React Query & other providers
+│   └── DataSeeder.tsx           # Database seeding utility
+│
+├── components/                  # React components
+│   ├── ui/                      # Base reusable UI primitives
+│   ├── layout/                  # Structural / chrome components
+│   └── features/                # Feature-specific component groups
+│       └── expenses/            # Expense management module
+│
+├── hooks/                       # Custom React hooks
+│
+├── lib/                         # Shared infrastructure (framework-agnostic)
+│   ├── database/                # Database layer (Dexie / IndexedDB)
+│   ├── utils/                   # Pure utility functions
+│
+├── types/                       # TypeScript type definitions
+│
+├── public/                      # Static assets
+│
+├── next.config.ts               # Next.js configuration
+├── eslint.config.mjs            # ESLint configuration
+├── postcss.config.mjs           # PostCSS configuration
+├── package.json
+├── tsconfig.json
+└── README.md
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Key Features
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Expense Management**: Create, read, update, and delete expenses with a clean UI.
+- **Filtering & Sorting**: Filter by category, sort by date/amount/title in ascending or descending order.
+- **Statistics Dashboard**: View total, average, max, and min amounts plus per-category breakdown.
+- **CSV Export**: Export filtered or full expense lists to CSV files.
+- **Persistent Storage**: Expenses stored in IndexedDB via Dexie; sort/filter preferences persisted in localStorage.
+- **React Query**: Server-state management with automatic cache invalidation on mutations.
+- **Form Validation**: Zod schemas with react-hook-form for type-safe form handling.
+- **PWA Support**: Service worker for offline capabilities.
