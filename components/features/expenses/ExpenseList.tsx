@@ -13,6 +13,7 @@ import { ExpenseFormData } from '@/lib/validation/expenseSchema';
 
 import { Expense, expenseSortField } from '@/types/expenses';
 import { sortOrder as sortOrderType } from '@/types';
+import ExpenseExportToCSV from './ExpenseExportToCSV';
 
 export default function ExpenseList() {
   const { data: expenses, isLoading, isError, error } = useExpenses();
@@ -112,6 +113,16 @@ export default function ExpenseList() {
       </ul>
 
       <p className="text-xl font-bold">Total: {total} $</p>
+
+      <div className="grid gap-2">
+        <p>Export to CSV:</p>
+
+        {filterCategory !== '' && (
+          <ExpenseExportToCSV expenses={sortedExpenses as Expense[]} label={'Filtered list'} />
+        )}
+
+        <ExpenseExportToCSV expenses={expenses as Expense[]} label={'Full list'} />
+      </div>
 
       {/* Modal for editing */}
       <Modal isOpen={!!editingExpense} onClose={() => setEditingExpense(null)}>
