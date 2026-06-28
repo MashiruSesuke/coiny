@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import Providers from './providers';
 
-import Header from '@/components/ui/Header';
+import Header from '@/components/layout/Header';
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 
 import './globals.css';
