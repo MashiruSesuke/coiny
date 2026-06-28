@@ -1,15 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import ExpenseForm from './ExpenseForm';
+import ExpenseFilters from './ExpenseFilters';
+import ExpenseSorting from './ExpenseSorting';
 import Modal from '@/components/ui/Modal';
 
 import { useExpenses, useDeleteExpense, useUpdateExpense } from '@/hooks/useExpenses';
 
-import { Expense } from '@/types/expenses';
 import { ExpenseFormData } from '@/lib/validation/expenseSchema';
-import ExpenseFilters from './ExpenseFilters';
+
+import { Expense, expenseSortField } from '@/types/expenses';
+import { sortOrder as sortOrderType } from '@/types';
 
 export default function ExpenseList() {
   const { data: expenses, isLoading, isError, error } = useExpenses();
@@ -22,12 +25,35 @@ export default function ExpenseList() {
   const [filterCategory, setFilterCategory] = useState('');
   const categories = [...new Set(expenses?.map((e) => e.category) || [])];
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p className="text-red-500">Error: {error?.message}</p>;
+  const [sortField, setSortField] = useState<expenseSortField>('date');
+  const [sortOrder, setSortOrder] = useState<sortOrderType>('desc');
 
   const filteredExpenses = filterCategory
     ? expenses?.filter((e) => e.category === filterCategory)
     : expenses;
+
+  const sortedExpenses = useMemo(() => {
+    if (!filteredExpenses) return [];
+    return [...filteredExpenses].sort((a, b) => {
+      let aVal = a[sortField];
+      let bVal = b[sortField];
+      if (sortField === 'date') {
+        aVal = new Date(aVal).getTime();
+        bVal = new Date(bVal).getTime();
+      }
+      if (typeof aVal === 'string') {
+        return sortOrder === 'asc'
+          ? aVal.localeCompare(bVal as string)
+          : (bVal as string).localeCompare(aVal as string);
+      }
+      return sortOrder === 'asc'
+        ? (aVal as number) - (bVal as number)
+        : (bVal as number) - (aVal as number);
+    });
+  }, [filteredExpenses, sortField, sortOrder]);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p className="text-red-500">Error: {error?.message}</p>;
 
   const handleUpdate = async (data: ExpenseFormData) => {
     if (!editingExpense) return;
@@ -46,8 +72,16 @@ export default function ExpenseList() {
   return (
     <div className="grid gap-4">
       <ExpenseFilters categories={categories} onFilterChange={setFilterCategory} />
+
+      <ExpenseSorting
+        sortField={sortField}
+        sortOrder={sortOrder}
+        onSortFieldChange={setSortField}
+        onSortOrderChange={setSortOrder}
+      />
+
       <ul className="space-y-2">
-        {filteredExpenses?.map((exp) => (
+        {sortedExpenses?.map((exp) => (
           <li
             key={exp.id}
             className="border p-3 rounded shadow-sm flex justify-between items-center"

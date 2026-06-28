@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { ExpenseFormData, expenseSchema } from '@/lib/validation/expenseSchema';
 
-import { Expense } from '@/types/expenses';
+import { Expense } from '@/types';
 
 interface ExpenseFormProps {
   defaultValues?: Expense;

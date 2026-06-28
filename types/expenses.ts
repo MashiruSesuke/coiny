@@ -5,3 +5,5 @@ export interface Expense {
   category: string;
   date: string;
 }
+
+export type expenseSortField = 'title' | 'amount' | 'category' | 'date';

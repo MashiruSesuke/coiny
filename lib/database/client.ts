@@ -1,6 +1,6 @@
 import Dexie from 'dexie';
 
-import { Expense } from '@/types/expenses';
+import { Expense } from '@/types';
 
 const db = new Dexie('CoinyDatabase') as Dexie & {
   expenses: Dexie.Table<Expense, number>;
