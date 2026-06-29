@@ -1,6 +1,7 @@
 'use client';
 
 import { useExpenses } from '@/hooks/useExpenses';
+import { useUserPreferences } from '@/hooks/useUserPreferences';
 
 /**
  * ExpenseStats — displays summary statistics for the expenses list.
@@ -10,6 +11,8 @@ import { useExpenses } from '@/hooks/useExpenses';
  */
 export default function ExpenseStats() {
   const { data: expenses } = useExpenses();
+
+  const { currency } = useUserPreferences();
 
   if (!expenses || expenses.length === 0) {
     return <p className="text-gray-500">No expenses yet</p>;
@@ -32,19 +35,18 @@ export default function ExpenseStats() {
 
   return (
     <div className="bg-gray-50 p-4 rounded border mb-4">
-      <h3 className="font-semibold text-lg">Statistics</h3>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
         <div className="grid">
-          <span className="text-gray-600">Total:</span> {total} $
+          <span className="text-gray-600">Total:</span> {total} {currency}
         </div>
         <div className="grid">
-          <span className="text-gray-600">Average:</span> {average.toFixed(2)} $
+          <span className="text-gray-600">Average:</span> {average.toFixed(2)} {currency}
         </div>
         <div className="grid">
-          <span className="text-gray-600">Max:</span> {max} $
+          <span className="text-gray-600">Max:</span> {max} {currency}
         </div>
         <div className="grid">
-          <span className="text-gray-600">Min:</span> {min} $
+          <span className="text-gray-600">Min:</span> {min} {currency}
         </div>
       </div>
       <div className="mt-2">
@@ -52,7 +54,7 @@ export default function ExpenseStats() {
         <div className="flex flex-wrap gap-2 mt-1">
           {Object.entries(byCategory).map(([cat, sum]) => (
             <span key={cat} className="bg-primary/20 px-2 py-1 rounded text-sm">
-              {cat}: {sum as number} $
+              {cat}: {sum as number} {currency}
             </span>
           ))}
         </div>

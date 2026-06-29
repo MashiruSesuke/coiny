@@ -10,6 +10,7 @@ import Modal from '@/components/ui/Modal';
 
 import { useExpenses, useDeleteExpense, useUpdateExpense } from '@/hooks/useExpenses';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useUserPreferences } from '@/hooks/useUserPreferences';
 
 import { ExpenseFormData } from '@/lib/validation/expenseSchema';
 
@@ -35,6 +36,8 @@ export default function ExpenseList() {
 
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  const { currency } = useUserPreferences();
 
   // Extract unique categories from expenses for the filter dropdown
   const categories = [...new Set(expenses?.map((e) => e.category) || [])];
@@ -107,7 +110,9 @@ export default function ExpenseList() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span>{exp.amount} $</span>
+              <span>
+                {exp.amount} {currency}
+              </span>
               <button
                 onClick={() => setEditingExpense(exp)}
                 className="text-blue-500 hover:text-blue-700"
@@ -125,7 +130,9 @@ export default function ExpenseList() {
         ))}
       </ul>
 
-      <p className="text-xl font-bold">Total: {total} $</p>
+      <p className="text-xl font-bold">
+        Total: {total} {currency}
+      </p>
 
       <div className="grid gap-2">
         <p>Export to CSV:</p>

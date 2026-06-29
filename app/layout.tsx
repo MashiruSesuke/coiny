@@ -6,6 +6,7 @@ import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 import Header from '@/components/layout/Header';
 import TabBar from '@/components/layout/TabBar';
 import DataSeeder from './DataSeeder';
+import ThemeProvider from './ThemeProvider';
 
 import './globals.css';
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         <Providers>
           <DataSeeder />
           <ServiceWorkerRegister />
+          <ThemeProvider />
           <Header />
           <main className="container mx-auto px-4 py-16">{children}</main>
           <TabBar />
