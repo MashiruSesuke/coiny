@@ -66,7 +66,7 @@ export default function ExpenseForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Amount</label>
+        <label className="block text-sm font-medium">Amount (in ₽)</label>
         <input type="number" {...register('amount')} className="border p-2 w-full rounded" />
         {errors.amount && <p className="text-red-500 text-sm">{errors.amount.message}</p>}
       </div>

@@ -16,6 +16,7 @@ import { ExpenseFormData } from '@/lib/validation/expenseSchema';
 
 import { Expense, expenseSortField } from '@/types/expenses';
 import { sortOrder as sortOrderType } from '@/types';
+import { convertToCurrency, formatCurrency } from '@/lib/utils/currency';
 
 /**
  * ExpenseList — main page component for managing expenses.
@@ -84,7 +85,8 @@ export default function ExpenseList() {
   };
 
   // Calculate total of filtered expenses (not sorted, since sort doesn't change the set)
-  const total = filteredExpenses?.reduce((sum, e) => sum + e.amount, 0) || 0;
+  const totalRUB = filteredExpenses?.reduce((sum, e) => sum + e.amount, 0) || 0;
+  const total = convertToCurrency(totalRUB, currency);
 
   return (
     <div className="grid gap-4">
@@ -98,41 +100,42 @@ export default function ExpenseList() {
       />
 
       <ul className="space-y-2">
-        {sortedExpenses?.map((exp) => (
-          <li
-            key={exp.id}
-            className="border p-3 rounded shadow-sm flex justify-between items-center"
-          >
-            <div>
-              <div className="font-medium">{exp.title}</div>
-              <div className="text-sm text-gray-500">
-                {exp.category} — {exp.date}
+        {sortedExpenses?.map((exp) => {
+          const convertedAmount = convertToCurrency(exp.amount, currency);
+          const formatted = formatCurrency(convertedAmount, currency);
+
+          return (
+            <li
+              key={exp.id}
+              className="border p-3 rounded shadow-sm flex justify-between items-center"
+            >
+              <div>
+                <div className="font-medium">{exp.title}</div>
+                <div className="text-sm text-gray-500">
+                  {exp.category} — {exp.date}
+                </div>
               </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span>
-                {exp.amount} {currency}
-              </span>
-              <button
-                onClick={() => setEditingExpense(exp)}
-                className="text-blue-500 hover:text-blue-700"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => setDeletingId(exp.id!)}
-                className="text-red-500 hover:text-red-700"
-              >
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
+              <div className="flex items-center gap-3">
+                <span>{formatted}</span>
+                <button
+                  onClick={() => setEditingExpense(exp)}
+                  className="text-blue-500 hover:text-blue-700"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => setDeletingId(exp.id!)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Delete
+                </button>
+              </div>
+            </li>
+          );
+        })}
       </ul>
 
-      <p className="text-xl font-bold">
-        Total: {total} {currency}
-      </p>
+      <p className="text-xl font-bold">Total: {formatCurrency(total, currency)}</p>
 
       <div className="grid gap-2">
         <p>Export to CSV:</p>
