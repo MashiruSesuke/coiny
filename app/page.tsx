@@ -1,26 +1,16 @@
-import DataSeeder from './DataSeeder';
+import { Metadata } from 'next';
+
 import ExpenseList from '@/components/features/expenses/ExpenseList';
-import AddExpenseForm from '@/components/features/expenses/AddExpenseForm';
-import ExpenseStats from '@/components/features/expenses/ExpenseStats';
+
+export const metadata: Metadata = {
+  title: 'Your expenses',
+};
 
 export default function HomePage() {
   return (
     <>
-      <DataSeeder />
-      <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">My expense</h2>
-          <AddExpenseForm />
-        </div>
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Expenses list</h2>
-          <ExpenseList />
-        </div>
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Expense stats</h2>
-          <ExpenseStats />
-        </div>
-      </div>
+      <h2 className="text-2xl font-semibold mb-4">My Expenses</h2>
+      <ExpenseList />
     </>
   );
 }
