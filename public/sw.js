@@ -1,4 +1,4 @@
-const CACHE_NAME = 'coiny-v0.3.0';
+const CACHE_NAME = 'coiny-v0.4.0';
 const urlsToCache = ['/', '/manifest.json', '/icons/icon-192x192.png', '/icons/icon-512.png'];
 
 // Installation - cache main resources
