@@ -57,8 +57,6 @@ export default function ExpenseForm({
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4 border p-4 rounded">
-      <h3 className="text-lg font-semibold">Add expense</h3>
-
       <div>
         <label className="block text-sm font-medium">Title</label>
         <input {...register('title')} className="border p-2 w-full rounded" />

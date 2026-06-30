@@ -54,8 +54,8 @@ export default function ProfileForm() {
             <button
               key={curr}
               onClick={() => setCurrency(curr)}
-              className={`px-4 py-2 rounded border ${
-                currency === curr ? 'bg-primary text-white' : 'bg-gray-100'
+              className={`px-4 py-2 rounded border border-primary text-white ${
+                currency === curr ? 'bg-primary-dark' : 'bg-primary-light'
               }`}
             >
               {curr}
@@ -71,8 +71,8 @@ export default function ProfileForm() {
             <button
               key={t}
               onClick={() => setTheme(t)}
-              className={`px-4 py-2 rounded border ${
-                theme === t ? 'bg-primary text-white' : 'bg-gray-100'
+              className={`px-4 py-2 rounded border border-primary text-white ${
+                theme === t ? 'bg-primary-dark' : 'bg-primary-light'
               }`}
             >
               {t.charAt(0).toUpperCase() + t.slice(1)}

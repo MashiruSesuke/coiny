@@ -14,7 +14,7 @@ export default function TabBar() {
   const pathname = usePathname();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-16 z-50">
+    <div className="fixed bottom-0 left-0 right-0 bg-primary border-t border-primary-dark flex justify-around items-center h-16 z-50">
       {tabs.map((tab) => {
         const isActive = pathname === tab.href || (tab.href === '/' && pathname === '/');
         return (
@@ -22,7 +22,7 @@ export default function TabBar() {
             key={tab.name}
             href={tab.href}
             className={`flex flex-col items-center justify-center flex-1 h-full ${
-              isActive ? 'text-primary' : 'text-gray-500'
+              isActive ? 'font-black' : 'font-normal'
             }`}
           >
             <span className="text-xl">{tab.icon}</span>

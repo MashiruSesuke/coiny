@@ -48,7 +48,7 @@ export default function ExpenseExportToCSV({
   return (
     <button
       onClick={exportToCSV}
-      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+      className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark"
     >
       {label}
     </button>

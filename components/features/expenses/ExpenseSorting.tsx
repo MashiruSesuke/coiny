@@ -32,25 +32,25 @@ export default function ExpenseSorting({
     <div className="flex gap-2 mb-4 flex-wrap">
       <button
         onClick={() => onSortFieldChange('date')}
-        className={`px-3 py-1 rounded ${sortField === 'date' ? 'bg-primary text-white' : 'bg-gray-200'}`}
+        className={`px-3 py-1 rounded text-white ${sortField === 'date' ? 'bg-primary' : 'bg-primary-light'}`}
       >
         Date {sortField === 'date' && (sortOrder === 'desc' ? '↓' : '↑')}
       </button>
       <button
         onClick={() => onSortFieldChange('amount')}
-        className={`px-3 py-1 rounded ${sortField === 'amount' ? 'bg-primary text-white' : 'bg-gray-200'}`}
+        className={`px-3 py-1 rounded text-white ${sortField === 'amount' ? 'bg-primary' : 'bg-primary-light'}`}
       >
         Amount {sortField === 'amount' && (sortOrder === 'desc' ? '↓' : '↑')}
       </button>
       <button
         onClick={() => onSortFieldChange('title')}
-        className={`px-3 py-1 rounded ${sortField === 'title' ? 'bg-primary text-white' : 'bg-gray-200'}`}
+        className={`px-3 py-1 rounded text-white ${sortField === 'title' ? 'bg-primary' : 'bg-primary-light'}`}
       >
         Title {sortField === 'title' && (sortOrder === 'desc' ? '↓' : '↑')}
       </button>
       <button
         onClick={() => onSortOrderChange(sortOrder === 'asc' ? 'desc' : 'asc')}
-        className="px-3 py-1 rounded bg-gray-200"
+        className="px-3 py-1 rounded text-white bg-primary-light"
       >
         {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
       </button>

@@ -49,26 +49,26 @@ export default function ExpenseStats() {
   );
 
   return (
-    <div className="bg-gray-50 p-4 rounded border mb-4">
+    <div className="bg-background p-4 rounded border mb-4">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
         <div className="grid">
-          <span className="text-gray-600">Total:</span> {formatCurrency(total, currency)}
+          <span className="text-foreground/70">Total:</span> {formatCurrency(total, currency)}
         </div>
         <div className="grid">
-          <span className="text-gray-600">Average:</span> {formatCurrency(average, currency)}
+          <span className="text-foreground/70">Average:</span> {formatCurrency(average, currency)}
         </div>
         <div className="grid">
-          <span className="text-gray-600">Max:</span> {formatCurrency(max, currency)}
+          <span className="text-foreground/70">Max:</span> {formatCurrency(max, currency)}
         </div>
         <div className="grid">
-          <span className="text-gray-600">Min:</span> {formatCurrency(min, currency)}
+          <span className="text-foreground/70">Min:</span> {formatCurrency(min, currency)}
         </div>
       </div>
       <div className="mt-2">
-        <span className="text-gray-600">By category:</span>
+        <span className="text-foreground/70">By category:</span>
         <div className="flex flex-wrap gap-2 mt-1">
           {Object.entries(byCategory).map(([cat, sum]) => (
-            <span key={cat} className="bg-primary/20 px-2 py-1 rounded text-sm">
+            <span key={cat} className="bg-primary-dark px-2 py-1 rounded text-sm text-white">
               {cat}: {formatCurrency(sum, currency)}
             </span>
           ))}
