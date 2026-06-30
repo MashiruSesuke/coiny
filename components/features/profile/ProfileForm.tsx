@@ -1,28 +1,27 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
+
 import { useUserPreferences } from '@/hooks/useUserPreferences';
 
 import { Currency, Theme } from '@/types';
-import { useEffect, useState } from 'react';
 
 export default function ProfileForm() {
-  const { name, setName, email, setEmail, currency, setCurrency, theme, setTheme } =
-    useUserPreferences();
+  const { name, setName, email, setEmail, currency, setCurrency } = useUserPreferences();
 
   const [isMounted, setIsMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 
-  // Пока компонент не смонтирован на клиенте, рендерим заглушку или null
+  // While component isn't mounted on client, render loading
   if (!isMounted) {
     return <div className="space-y-4">Loading profile...</div>;
   }
-
-  // На SSR рендерим форму сразу — содержимое одинаковое на сервере и клиенте,
-  // поэтому hydration mismatch не возникнет
 
   return (
     <div className="space-y-6">

@@ -1,5 +1,13 @@
-const CACHE_NAME = 'coiny-v0.4.0';
-const urlsToCache = ['/', '/manifest.json', '/icons/icon-192x192.png', '/icons/icon-512.png'];
+const CACHE_NAME = 'coiny-v0.5.0';
+const urlsToCache = [
+  '/',
+  '/add',
+  '/stats',
+  '/profile',
+  '/manifest.json',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512.png',
+];
 
 // Installation - cache main resources
 self.addEventListener('install', (event) => {

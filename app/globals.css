@@ -8,19 +8,30 @@
   --foreground: #1f2937;
 }
 
+.dark {
+  --background: #1f2937;
+  --foreground: #f9fafb;
+  --card-bg: #374151;
+  --border-color: #4b5563;
+  --text-secondary: #9ca3af;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1f2937;
+    --foreground: #f9fafb;
+    --card-bg: #374151;
+    --border-color: #4b5563;
+    --text-secondary: #9ca3af;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--foreground);
   --color-primary-light: var(--foreground);
   --color-primary-dark: var(--foreground);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
